@@ -1,0 +1,36 @@
+{
+  "name": "poker-rank",
+  "version": "1.0.0",
+  "description": "Sort poker hands by texas hold'em ranking",
+  "main": "index.js",
+  "scripts": {
+    "test": "tape tests/index.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/brunoscopelliti/poker-rank.git"
+  },
+  "keywords": [
+    "poker",
+    "hold'em",
+    "evaluate",
+    "sort"
+    "win",
+    "best",
+    "hand",
+    "rank",
+    "ranking"
+  ],
+  "author": "Bruno Scopelliti",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/brunoscopelliti/poker-rank/issues"
+  },
+  "homepage": "https://github.com/brunoscopelliti/poker-rank",
+  "dependencies": {
+    "poker-has": "^2.0.0"
+  },
+  "devDependencies": {
+    "tape": "^4.2.2"
+  }
+}

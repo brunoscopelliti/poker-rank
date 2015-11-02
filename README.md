@@ -1,2 +1,2 @@
 # poker-rank
-Compute the texas hold'em best hand
+Sort poker hands by texas hold'em ranking.
