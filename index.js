@@ -24,8 +24,9 @@ function getCardRank(rank){
  *  ])
  *
  * < output:
- * The same list passed as input sorted by hand rankings;
- * the original index of an hand is added to the 'index' property of each entry of the least.
+ * the input list is sorted by the strength of the combination.
+ * each entry is replaced by the strength computed by the **poker-has** module. (brunoscopelliti/poker-has on Github)
+ * the original index of an hand is added to the 'index' property of each entry.
  *
  */
 exports = module.exports = function rank(hands){

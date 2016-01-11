@@ -1,6 +1,6 @@
 {
   "name": "poker-rank",
-  "version": "1.0.0",
+  "version": "1.1.0",
   "description": "Sort poker hands by texas hold'em ranking",
   "main": "index.js",
   "scripts": {
