@@ -1,375 +1,195 @@
+/* eslint-env jest */
 
-const tape = require('tape');
-const rank = require('../index.js');
+const rank = require("../index.js");
 
-
-
-tape('poker-rank:', function(t) { t.end(); });
-
-tape('check interface', function(t) {
-  t.equal(typeof rank, 'function', 'rank is a function');
-  t.end();
+it("is a function", () => {
+  expect(typeof rank).toBe("function");
 });
 
-tape('rank all combinations', function(t) {
+const card =
+  (rank, type) => ({
+    rank,
+    type,
+  });
 
-  const rank_A = Object.freeze([
-    {rank:'A', type:'H'},
-    {rank:'4', type:'H'},
-    {rank:'J', type:'S'},
-    {rank:'Q', type:'D'},
-    {rank:'9', type:'C'}
-  ]);
+it("sorts all possible combinations", () => {
+  const cardHighQueen = [card("2", "H"), card("4", "H"), card("J", "S"), card("Q", "D"), card("9", "C")];
+  const cardHighAce = [card("A", "H"), card("4", "H"), card("J", "S"), card("Q", "D"), card("9", "C")];
+  const pairOfThree = [card("3", "H"), card("4", "H"), card("3", "S"), card("Q", "D"), card("9", "C")];
+  const pairOfQueen = [card("2", "H"), card("4", "H"), card("Q", "S"), card("Q", "D"), card("9", "C")];
+  const doublePairOfNine = [card("3", "H"), card("9", "H"), card("3", "S"), card("9", "D"), card("A", "C")];
+  const threeOfAKindOfJack = [card("J", "H"), card("9", "D"), card("J", "S"), card("J", "C"), card("5", "C")];
+  const straightOfFive = [card("3", "H"), card("4", "D"), card("2", "S"), card("5", "C"), card("A", "C")];
+  const straightOfNine = [card("6", "H"), card("7", "D"), card("9", "S"), card("8", "C"), card("5", "C")];
+  const straightOfAce = [card("K", "H"), card("J", "D"), card("A", "S"), card("10", "C"), card("Q", "C")];
+  const flushOfEight = [card("2", "D"), card("3", "D"), card("8", "D"), card("5", "D"), card("6", "D")];
+  const flushOfJack = [card("3", "H"), card("4", "H"), card("2", "H"), card("5", "H"), card("J", "H")];
+  const fullOfThree = [card("3", "D"), card("3", "S"), card("A", "D"), card("3", "H"), card("A", "C")];
+  const fullOfSeven = [card("7", "D"), card("7", "S"), card("2", "D"), card("7", "H"), card("2", "C")];
+  const pokerOfFour = [card("A", "H"), card("4", "D"), card("4", "S"), card("4", "C"), card("4", "H")];
+  const pokerOfAce = [card("A", "H"), card("9", "D"), card("A", "S"), card("A", "C"), card("A", "D")];
+  const straightFlushOfFive = [card("3", "D"), card("4", "D"), card("2", "D"), card("5", "D"), card("A", "D")];
+  const straightFlushOfNine = [card("6", "H"), card("7", "H"), card("9", "H"), card("8", "H"), card("5", "H")];
+  const royalStraightFlush = [card("K", "C"), card("J", "C"), card("A", "C"), card("10", "C"), card("Q", "C")];
 
-  const pair_of_Q = Object.freeze([
-    {rank:'2', type:'H'},
-    {rank:'4', type:'H'},
-    {rank:'Q', type:'S'},
-    {rank:'Q', type:'D'},
-    {rank:'9', type:'C'}
-  ]);
-
-  const pair_of_3 = Object.freeze([
-    {rank:'3', type:'H'},
-    {rank:'4', type:'H'},
-    {rank:'3', type:'S'},
-    {rank:'Q', type:'D'},
-    {rank:'9', type:'C'}
-  ]);
-
-  const doublePair_of_9 = Object.freeze([
-    {rank:'3', type:'H'},
-    {rank:'9', type:'H'},
-    {rank:'3', type:'S'},
-    {rank:'9', type:'D'},
-    {rank:'A', type:'C'}
-  ]);
-
-  const threeOfAKind_of_J = Object.freeze([
-    {rank:'J', type:'H'},
-    {rank:'9', type:'D'},
-    {rank:'J', type:'S'},
-    {rank:'J', type:'C'},
-    {rank:'5', type:'C'}
-  ]);
-
-  const stright_of_9 = Object.freeze([
-    {rank:'6', type:'H'},
-    {rank:'7', type:'D'},
-    {rank:'9', type:'S'},
-    {rank:'8', type:'C'},
-    {rank:'5', type:'C'}
-  ]);
-
-  const stright_of_A_top = Object.freeze([
-    {rank:'K', type:'H'},
-    {rank:'J', type:'D'},
-    {rank:'A', type:'S'},
-    {rank:'10', type:'C'},
-    {rank:'Q', type:'C'}
-  ]);
-
-  const stright_of_A_bottom = Object.freeze([
-    {rank:'3', type:'H'},
-    {rank:'4', type:'D'},
-    {rank:'2', type:'S'},
-    {rank:'5', type:'C'},
-    {rank:'A', type:'C'}
-  ]);
-
-  const flush_of_J = Object.freeze([
-    {rank:'3', type:'H'},
-    {rank:'4', type:'H'},
-    {rank:'2', type:'H'},
-    {rank:'5', type:'H'},
-    {rank:'J', type:'H'}
-  ]);
-
-  const flush_of_8 = Object.freeze([
-    {rank:'2', type:'D'},
-    {rank:'3', type:'D'},
-    {rank:'8', type:'D'},
-    {rank:'5', type:'D'},
-    {rank:'6', type:'D'}
-  ]);
-
-  const full_of_7 = Object.freeze([
-    {rank:'7', type:'D'},
-    {rank:'7', type:'S'},
-    {rank:'2', type:'D'},
-    {rank:'7', type:'H'},
-    {rank:'2', type:'C'}
-  ]);
-
-  const full_of_3 = Object.freeze([
-    {rank:'3', type:'D'},
-    {rank:'3', type:'S'},
-    {rank:'A', type:'D'},
-    {rank:'3', type:'H'},
-    {rank:'A', type:'C'}
-  ]);
-
-  const poker_of_A = Object.freeze([
-    {rank:'A', type:'H'},
-    {rank:'9', type:'D'},
-    {rank:'A', type:'S'},
-    {rank:'A', type:'C'},
-    {rank:'A', type:'D'}
-  ]);
-
-  const strightFlush_of_9 = Object.freeze([
-    {rank:'6', type:'H'},
-    {rank:'7', type:'H'},
-    {rank:'9', type:'H'},
-    {rank:'8', type:'H'},
-    {rank:'5', type:'H'}
-  ]);
-
-  const strightFlush_of_A_bottom = Object.freeze([
-    {rank:'3', type:'D'},
-    {rank:'4', type:'D'},
-    {rank:'2', type:'D'},
-    {rank:'5', type:'D'},
-    {rank:'A', type:'D'}
-  ]);
-
-  const royalStrightFlush = Object.freeze([
-    {rank:'K', type:'C'},
-    {rank:'J', type:'C'},
-    {rank:'A', type:'C'},
-    {rank:'10', type:'C'},
-    {rank:'Q', type:'C'}
-  ]);
-
-  const expectedOrder = [8, 0, 10, 6, 2, 7, 15, 11, 3, 13, 12, 4, 9, 14, 5, 1];
-
-  const hands = [
-    strightFlush_of_9,
-    rank_A,
-    full_of_7,
-    stright_of_A_top,
-    threeOfAKind_of_J,
-    pair_of_3,
-    poker_of_A,
-    full_of_3,
-    royalStrightFlush,
-    doublePair_of_9,
-    strightFlush_of_A_bottom,
-    flush_of_8,
-    stright_of_A_bottom,
-    stright_of_9,
-    pair_of_Q,
-    flush_of_J
+  const expectedRank = [
+    royalStraightFlush,
+    straightFlushOfNine,
+    straightFlushOfFive,
+    pokerOfAce,
+    pokerOfFour,
+    fullOfSeven,
+    fullOfThree,
+    flushOfJack,
+    flushOfEight,
+    straightOfAce,
+    straightOfNine,
+    straightOfFive,
+    threeOfAKindOfJack,
+    doublePairOfNine,
+    pairOfQueen,
+    pairOfThree,
+    cardHighAce,
+    cardHighQueen,
   ];
 
-  t.deepEqual(rank(hands).map(rank => rank.index), expectedOrder);
+  // Shuffle the competing combinations
+  const competingCombinations =
+    expectedRank.slice().sort(() => Math.random() - Math.random());
 
-  t.end();
+  const royalStraightFlushIndex = competingCombinations.indexOf(royalStraightFlush);
 
+  const sortedRank = rank(competingCombinations);
+  expect(sortedRank).toEqual(expectedRank);
+
+  expect(sortedRank[0].index).toBe(royalStraightFlushIndex);
+  expect(sortedRank[0].rank).toEqual({
+    name: "Royal flush",
+    kickers: [],
+    rank: "A",
+    strength: 9,
+  });
 });
 
-tape('rank on kickers', function(t) {
+it("sorts on the basis of kickers", () => {
+  const cardHighAceWithQueen = [card("A", "D"), card("8", "H"), card("Q", "S"), card("J", "D"), card("9", "C")];
+  const cardHighAceWithKing = [card("A", "H"), card("4", "H"), card("J", "S"), card("K", "D"), card("9", "C")];
+  const pairOfQueenWithFour = [card("2", "H"), card("4", "D"), card("Q", "S"), card("Q", "D"), card("9", "C")];
+  const pairOfQueenWithFive = [card("2", "D"), card("5", "H"), card("Q", "C"), card("Q", "H"), card("9", "D")];
+  const flushOfKingWithNine = [card("3", "H"), card("9", "H"), card("K", "H"), card("Q", "H"), card("2", "H")];
+  const flushOfKingWithJack = [card("Q", "D"), card("9", "D"), card("K", "D"), card("J", "D"), card("2", "D")];
 
-  const rank_A = Object.freeze([
-    {rank:'A', type:'H'},
-    {rank:'4', type:'H'},
-    {rank:'J', type:'S'},
-    {rank:'Q', type:'D'},
-    {rank:'9', type:'C'}
-  ]);
-
-  const pair_of_Q = Object.freeze([
-    {rank:'2', type:'H'},
-    {rank:'4', type:'H'},
-    {rank:'Q', type:'S'},
-    {rank:'Q', type:'D'},
-    {rank:'9', type:'C'}
-  ]);
-
-  const pair_of_Q_bis = Object.freeze([
-    {rank:'2', type:'D'},
-    {rank:'5', type:'H'},
-    {rank:'Q', type:'C'},
-    {rank:'Q', type:'H'},
-    {rank:'9', type:'D'}
-  ]);
-
-  const pair_of_3 = Object.freeze([
-    {rank:'3', type:'H'},
-    {rank:'4', type:'H'},
-    {rank:'3', type:'S'},
-    {rank:'Q', type:'D'},
-    {rank:'9', type:'C'}
-  ]);
-
-  const doublePair_of_9 = Object.freeze([
-    {rank:'3', type:'H'},
-    {rank:'9', type:'H'},
-    {rank:'3', type:'S'},
-    {rank:'9', type:'D'},
-    {rank:'A', type:'C'}
-  ]);
-
-  const threeOfAKind_of_J = Object.freeze([
-    {rank:'J', type:'H'},
-    {rank:'9', type:'D'},
-    {rank:'J', type:'S'},
-    {rank:'J', type:'C'},
-    {rank:'5', type:'C'}
-  ]);
-
-  const royalStrightFlush = Object.freeze([
-    {rank:'K', type:'C'},
-    {rank:'J', type:'C'},
-    {rank:'A', type:'C'},
-    {rank:'10', type:'C'},
-    {rank:'Q', type:'C'}
-  ]);
-
-  const expectedOrder = [4, 2, 5, 6, 0, 3, 1];
-
-  const hands = [
-    pair_of_Q,
-    rank_A,
-    threeOfAKind_of_J,
-    pair_of_3,
-    royalStrightFlush,
-    doublePair_of_9,
-    pair_of_Q_bis
+  const expectedRank = [
+    flushOfKingWithJack,
+    flushOfKingWithNine,
+    pairOfQueenWithFive,
+    pairOfQueenWithFour,
+    cardHighAceWithKing,
+    cardHighAceWithQueen,
   ];
 
-  t.deepEqual(rank(hands).map(rank => rank.index), expectedOrder);
+  // Shuffle the competing combinations
+  const competingCombinations =
+    expectedRank.slice().sort(() => Math.random() - Math.random());
 
-  t.end();
+  const flushOfKingWithJackIndex = competingCombinations.indexOf(flushOfKingWithJack);
 
+  const sortedRank = rank(competingCombinations);
+  expect(sortedRank).toEqual(expectedRank);
+
+  expect(sortedRank[0].index).toBe(flushOfKingWithJackIndex);
+  expect(sortedRank[0].rank).toEqual({
+    name: "Flush",
+    kickers: ["Q", "J", "9", "2"],
+    rank: "K",
+    strength: 5,
+  });
 });
 
-tape('rank with ex-equo', function(t) {
-
-  const rank_A = Object.freeze([
-    {rank:'A', type:'H'},
-    {rank:'4', type:'H'},
-    {rank:'J', type:'S'},
-    {rank:'Q', type:'D'},
-    {rank:'9', type:'C'}
+it("considers all the elements in the kickers array", () => {
+  const comb1 = [card("A", "D"), card("K", "D"), card("10", "D"), card("7", "D"), card("2", "C")];
+  const comb2 = [card("K", "H"), card("10", "H"), card("A", "H"), card("7", "H"), card("3", "C")];
+  const sortedRank = rank([comb1, comb2]);
+  expect(sortedRank).toEqual([
+    comb2,
+    comb1,
   ]);
-
-  const pair_of_Q = Object.freeze([
-    {rank:'2', type:'H'},
-    {rank:'4', type:'H'},
-    {rank:'Q', type:'S'},
-    {rank:'Q', type:'D'},
-    {rank:'9', type:'C'}
-  ]);
-
-  const pair_of_Q_bis = Object.freeze([
-    {rank:'2', type:'D'},
-    {rank:'5', type:'H'},
-    {rank:'Q', type:'C'},
-    {rank:'Q', type:'H'},
-    {rank:'9', type:'D'}
-  ]);
-
-  const doublePair_of_9 = Object.freeze([
-    {rank:'3', type:'H'},
-    {rank:'9', type:'H'},
-    {rank:'3', type:'S'},
-    {rank:'9', type:'D'},
-    {rank:'A', type:'C'}
-  ]);
-
-  const doublePair_of_9_exequo = Object.freeze([
-    {rank:'3', type:'C'},
-    {rank:'9', type:'S'},
-    {rank:'3', type:'D'},
-    {rank:'9', type:'C'},
-    {rank:'A', type:'D'}
-  ]);
-
-  const expectedOrder = [0, 4, 1, 3, 2];
-
-  const hands = [
-    doublePair_of_9, pair_of_Q_bis, rank_A, pair_of_Q, doublePair_of_9_exequo
-  ];
-
-  const sortedHands = rank(hands);
-
-  t.deepEqual(sortedHands.map(rank => rank.index), expectedOrder);
-
-  const exequoHands = sortedHands.filter(rank => typeof rank.exequo != 'undefined')
-
-  t.equal(exequoHands.length, 2);
-  t.equal(exequoHands[0].exequo, '#0');
-  t.equal(exequoHands[1].exequo, '#0');
-
-  t.end();
-
 });
 
-tape('rank with more ex-equo', function(t) {
-
-  const rank_A_1 = Object.freeze([
-    {rank:'A', type:'H'},
-    {rank:'3', type:'H'},
-    {rank:'4', type:'H'},
-    {rank:'5', type:'H'},
-    {rank:'6', type:'D'}
+it("recognize ex-equo", () => {
+  const pairOfQueen1 = [card("A", "H"), card("Q", "H"), card("Q", "S"), card("3", "D"), card("9", "D")];
+  const pairOfQueen2 = [card("A", "D"), card("Q", "P"), card("Q", "D"), card("3", "H"), card("9", "C")];
+  const sortedRank = rank([pairOfQueen1, pairOfQueen2]);
+  expect(sortedRank).toEqual([
+    pairOfQueen1,
+    pairOfQueen2,
   ]);
+  expect(sortedRank[0].exequo).toBe("#0");
+  expect(sortedRank[1].exequo).toBe("#0");
+});
 
-  const rank_A_2 = Object.freeze([
-    {rank:'A', type:'D'},
-    {rank:'3', type:'D'},
-    {rank:'4', type:'D'},
-    {rank:'5', type:'D'},
-    {rank:'6', type:'C'}
-  ]);
+it("recognize ex-equo / 2", () => {
+  const cardHighAce = [card("A", "H"), card("4", "H"), card("J", "S"), card("Q", "D"), card("9", "C")];
+  const pairOfQueen1 = [card("A", "H"), card("Q", "H"), card("Q", "S"), card("3", "D"), card("9", "D")];
+  const pairOfQueen2 = [card("A", "D"), card("Q", "P"), card("Q", "D"), card("3", "H"), card("9", "C")];
+  const pokerOfAce = [card("A", "H"), card("9", "D"), card("A", "S"), card("A", "C"), card("A", "D")];
 
-  const rank_A_3 = Object.freeze([
-    {rank:'A', type:'C'},
-    {rank:'3', type:'C'},
-    {rank:'4', type:'C'},
-    {rank:'5', type:'C'},
-    {rank:'6', type:'S'}
-  ]);
-
-  const pair_of_7 = Object.freeze([
-    {rank:'7', type:'C'},
-    {rank:'7', type:'C'},
-    {rank:'10', type:'D'},
-    {rank:'9', type:'D'},
-    {rank:'6', type:'H'}
-  ]);
-
-  const flush_of_K_1 = Object.freeze([
-    {rank:'K', type:'S'},
-    {rank:'Q', type:'S'},
-    {rank:'J', type:'S'},
-    {rank:'9', type:'S'},
-    {rank:'8', type:'S'}
-  ]);
-
-  const flush_of_K_2 = Object.freeze([
-    {rank:'K', type:'C'},
-    {rank:'Q', type:'C'},
-    {rank:'J', type:'C'},
-    {rank:'9', type:'C'},
-    {rank:'8', type:'C'}
-  ]);
-
-
-  const expectedOrder = [2, 4, 1, 0, 3, 5];
-
-  const hands = [
-    rank_A_3, pair_of_7, flush_of_K_2, rank_A_1, flush_of_K_1, rank_A_2
+  const expectedRank = [
+    pokerOfAce,
+    pairOfQueen1,
+    pairOfQueen2,
+    cardHighAce,
   ];
 
-  const sortedHands = rank(hands);
+  const sortedRank = rank([pairOfQueen1, cardHighAce, pokerOfAce, pairOfQueen2]);
+  expect(sortedRank).toEqual(expectedRank);
 
-  t.deepEqual(sortedHands.map(rank => rank.index), expectedOrder);
+  expect(sortedRank[0].index).toBe(2);
+  expect(sortedRank[0].rank).toEqual({
+    name: "Poker",
+    kickers: ["9"],
+    rank: "A",
+    strength: 7,
+  });
 
-  t.equal(sortedHands.filter(rank => rank.exequo == '#0').length, 3);
-  t.equal(sortedHands.filter(rank => rank.exequo == '#1').length, 2);
+  expect(
+    sortedRank.filter((rank) => rank.exequo === "#0")
+  ).toEqual([pairOfQueen1, pairOfQueen2]);
+});
 
-  t.end();
+it("recognize multiple ex-equo", () => {
+  const cardHighAce1 = [card("A", "H"), card("3", "H"), card("4", "H"), card("5", "H"), card("6", "D")];
+  const cardHighAce2 = [card("A", "D"), card("3", "D"), card("4", "D"), card("5", "D"), card("6", "C")];
+  const cardHighAce3 = [card("A", "C"), card("3", "C"), card("4", "C"), card("5", "C"), card("6", "S")];
+  const pairOfSeven = [card("7", "C"), card("7", "C"), card("8", "D"), card("9", "D"), card("6", "H")];
+  const flushOfKing1 = [card("K", "S"), card("Q", "S"), card("J", "S"), card("9", "S"), card("8", "S")];
+  const flushOfKing2 = [card("K", "C"), card("Q", "C"), card("J", "C"), card("9", "C"), card("8", "C")];
 
+  const expectedRank = [
+    flushOfKing1,
+    flushOfKing2,
+    pairOfSeven,
+    cardHighAce3,
+    cardHighAce1,
+    cardHighAce2,
+  ];
+
+  const sortedRank = rank([cardHighAce3, pairOfSeven, cardHighAce1, flushOfKing1, cardHighAce2, flushOfKing2]);
+  expect(sortedRank).toEqual(expectedRank);
+
+  expect(sortedRank[0].index).toBe(3);
+  expect(sortedRank[0].rank).toEqual({
+    name: "Flush",
+    kickers: ["Q", "J", "9", "8"],
+    rank: "K",
+    strength: 5,
+  });
+
+  expect(
+    sortedRank.filter((rank) => rank.exequo === "#0")
+  ).toEqual([cardHighAce3, cardHighAce1, cardHighAce2]);
+
+  expect(
+    sortedRank.filter((rank) => rank.exequo === "#1")
+  ).toEqual([flushOfKing1, flushOfKing2]);
 });

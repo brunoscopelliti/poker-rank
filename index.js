@@ -1,68 +1,75 @@
+const getHandRank = require("poker-has");
 
-'use strict';
+const cardsRank = require("./domain/rank-cards");
 
-const getHandRank = require('poker-has');
+const getCardRank =
+  (rank) => cardsRank.indexOf(rank);
 
-const cardsRank = require('./domain/rank-cards');
-
-
-function getCardRank(rank){
-  return cardsRank.indexOf(rank);
-}
-
-
-/*
+/**
  * Sort the hands passed as input by ranking.
- *
- * @example
- * input >
- *  rank([
- *    [{ rank: '2', type: 'H'}, { rank: 'A', type: 'H'}, { rank: '9', type: 'C'}, { rank: 'J', type: 'D'}, { rank: '8', type: 'D'}],
- *    [{ rank: '3', type: 'C'}, { rank: '3', type: 'H'}, { rank: '4', type: 'C'}, { rank: 'J', type: 'C'}, { rank: 'Q', type: 'S'}],
- *    ...,
- *    [{ rank: 'A', type: 'S'}, { rank: '9', type: 'S'}, { rank: 'A', type: 'C'}, { rank: 'A', type: 'D'}, { rank: '10', type: 'H'}]
- *  ])
- *
- * < output:
- * the input list is sorted by the strength of the combination.
- * each entry is replaced by the strength computed by the **poker-has** module. (brunoscopelliti/poker-has on Github)
- * the original index of an hand is added to the 'index' property of each entry.
- *
+ * The module brunoscopelliti/poker-has is used to compute the strenght of a combination.
+ * The original index of a combination is added as `index` property on each entry.
+ * @name rank
+ * @param {Card[][]} competingCombinations
+ * @return {Card[][]}
  */
-exports = module.exports = function rank(hands){
-
+function rank (competingCombinations) {
   let exequoCount = -1;
 
-  return hands
-    .map(function setIndex(hand, i) {
-      let rank = getHandRank(hand);
-      rank.index = i;
-      return rank;
+  return competingCombinations
+    .map((cards, i) => {
+      /**
+       * @name rank
+       * @type CombinationStrength
+       */
+      const rank = getHandRank(cards);
+      cards.index = i;
+      cards.rank = rank;
+      return cards;
     })
-    .sort(function sortByRank(a, b){
-
-      if (a.strength != b.strength){
-        return b.strength - a.strength;
+    .sort(function sortByRank (comb1, comb2) {
+      const rank1 = comb1.rank;
+      const rank2 = comb2.rank;
+      if (rank1.strength !== rank2.strength) {
+        // different point, eg. pair vs poker
+        return rank2.strength - rank1.strength;
       }
 
-      let aRank = getCardRank(a.rank);
-      let bRank = getCardRank(b.rank);
-      if (aRank != bRank){
-        return bRank - aRank;
+      const val1 = getCardRank(rank1.rank);
+      const val2 = getCardRank(rank2.rank);
+
+      if (val1 !== val2) {
+        // different point rank, eg. pair of 3 vs pair of 7
+        return val2 - val1;
       }
 
-      for (let i=0; i<a.kickers.length; i++){
-        let aKickerRank = getCardRank(a.kickers[i]);
-        let bKickerRank = getCardRank(b.kickers[i]);
-        if (aKickerRank != bKickerRank){
-          return bKickerRank - aKickerRank;
+      for (let i = 0; i < rank1.kickers.length; i++) {
+        const kicker1 = getCardRank(rank1.kickers[i]);
+        const kicker2 = getCardRank(rank2.kickers[i]);
+
+        if (kicker1 !== kicker2) {
+          // different kickers, eg. pair of 3 (with J, 4, 2) vs pair of 3 (with J, 7, 2)
+          return kicker2 - kicker1;
         }
       }
 
-      // ex-equo
-      let label = a.exequo || b.exequo || '#' + (++exequoCount);
-      a.exequo  = b.exequo = label;
-
+      // ex-equo, eg. both are flush, etc.
+      const label = comb1.exequo || comb2.exequo || "#" + (++exequoCount);
+      comb1.exequo = comb2.exequo = label;
     });
-
 }
+
+module.exports = rank;
+
+/**
+ * @typedef {Object} Card
+ * @property {string} type
+ * @property {string} rank
+ */
+
+/**
+ * @typedef {Object} CombinationStrength
+ * @property {number} strength
+ * @property {string} rank
+ * @property {string[]} kickers
+ */

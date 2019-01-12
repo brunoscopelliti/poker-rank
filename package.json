@@ -1,10 +1,11 @@
 {
   "name": "poker-rank",
-  "version": "1.1.0",
+  "version": "2.0.0",
   "description": "Sort poker hands by texas hold'em ranking",
   "main": "index.js",
   "scripts": {
-    "test": "tape tests/index.js"
+    "lint": "eslint index.js domain/*.js tests/*.js",
+    "test": "npm run lint && jest"
   },
   "repository": {
     "type": "git",
@@ -12,11 +13,17 @@
   },
   "keywords": [
     "poker",
+    "poker rank",
     "hold'em",
+    "hold'em ranking",
     "evaluate",
+    "evaluate poker",
+    "evaluate hand",
     "sort",
+    "sort poker",
     "win",
     "best",
+    "best poker",
     "hand",
     "rank",
     "ranking"
@@ -28,9 +35,16 @@
   },
   "homepage": "https://github.com/brunoscopelliti/poker-rank",
   "dependencies": {
-    "poker-has": "2.1.0"
+    "poker-has": "4.0.1"
   },
   "devDependencies": {
-    "tape": "^4.2.2"
+    "eslint": "5.12.0",
+    "eslint-config-bruno": "2.0.0",
+    "eslint-plugin-import": "2.14.0",
+    "eslint-plugin-node": "8.0.1",
+    "eslint-plugin-promise": "4.0.1",
+    "eslint-plugin-standard": "4.0.0",
+    "jest": "23.6.0",
+    "pre-commit": "1.2.2"
   }
 }
