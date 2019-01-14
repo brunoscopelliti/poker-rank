@@ -1,5 +1,7 @@
 /* eslint-env jest */
 
+"use strict";
+
 const rank = require("../index.js");
 
 it("is a function", () => {

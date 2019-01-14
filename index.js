@@ -1,3 +1,5 @@
+"use strict";
+
 const getHandRank = require("poker-has");
 
 const cardsRank = require("./domain/rank-cards");
