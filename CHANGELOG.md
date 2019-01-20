@@ -1,5 +1,9 @@
 # Changelog
 
+## 20/01/2019 v2.0.2
+
+* Fix readme example.
+
 ## 14/01/2019 v2.0.1
 
 * Restore "use strict" pragma in each file.
