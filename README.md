@@ -3,10 +3,10 @@
 You can install [poker-rank](https://www.npmjs.com/package/poker-rank) via npm:
 
 ```
-npm i poker-rank --save
+npm i poker-rank
 ```
 
-## intro
+## Intro
 
 If you are making some sort of poker game, chances are that sooner or later you want to know in a group of cards combination what is the best.
 
@@ -66,7 +66,7 @@ sortedCombs;
 // ]
 ```
 
-`poker-rank` uses [brunoscopelliti/poker-has](https://github.com/brunoscopelliti/poker-has) to evaluate the strength of a combination.
+`poker-rank` uses @botpoker/hand to evaluate the strength of a combination.
 
-`poker-has` also handles **ex-equo**. In case of ex-equo, the objects have also an `exequo` property.
+`@botpoker/hand` also handles **ex-equo**. In case of ex-equo, the objects have also an `exequo` property.
 

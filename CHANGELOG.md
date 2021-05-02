@@ -1,5 +1,9 @@
 # Changelog
 
+## 02/05/2021 v2.0.3
+
+* Replace `poker-has` with `@botpoker/hand`.
+
 ## 20/01/2019 v2.0.2
 
 * Fix readme example.
