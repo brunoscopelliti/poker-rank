@@ -1,5 +1,9 @@
 # Changelog
 
+## 02/05/2021 v1.0.0
+
+* Renamed to `@botpoker/rank-hands`.
+
 ## 02/05/2021 v2.0.3
 
 * Replace `poker-has` with `@botpoker/hand`.
